@@ -23,7 +23,11 @@ function getPlugins() {
       //new DedupePlugin()
     ];
   }
-  return [];
+  return [
+    new webpack.ProvidePlugin({
+      __extends: 'typescript-extends'
+    })
+  ];
 }
 
 module.exports = {
@@ -34,7 +38,10 @@ module.exports = {
   },
 
   resolve: {
-    extensions: ['.js', '.json']
+    extensions: ['.js', '.json', '.ts'],
+    alias: {
+      'api': path.resolve(__dirname, '../api')
+    }
   },
 
   module: {
@@ -42,6 +49,11 @@ module.exports = {
       {
         test: /\.json$/,
         loader: 'json'
+      },
+      {
+        test: /\.ts$/,
+        exclude: /(node_modules)/,
+        loaders: ['awesome-typescript-loader']
       }
     ]
   },
@@ -53,6 +65,7 @@ module.exports = {
   node: {
     fs: 'empty',
     net: 'empty',
-    tls: 'empty'
+    tls: 'empty',
+    __dirname: true
   }
 };
